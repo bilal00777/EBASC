@@ -1,3 +1,9 @@
+<?php
+// Start a session to store success or error messages
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 

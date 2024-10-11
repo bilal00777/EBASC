@@ -144,8 +144,8 @@
             <a href="manage_sponsor.php">Manage Sponsors</a>
         </div>
 
-        <!-- Main nav link without sub-menu -->
         <a href="../logout.php" class="nav-link">Logout</a>
+
     </div>
 
     <div class="content" id="mainContent">

@@ -57,6 +57,7 @@
             margin-left: 250px;
             padding: 16px;
             transition: margin-left 0.3s;
+            overflow:scroll;
         }
 
         /* When sidebar is open */
@@ -125,6 +126,32 @@
         .nav-link.with-sub.active + .sub-menu {
             display: block;
         }
+
+
+
+
+        #mainContent {
+          
+            overflow: auto;
+            border: 2px solid #ccc;
+            position: relative;
+            cursor: grab;
+        }
+
+        /* Optional: Large content inside to demonstrate scrolling */
+        .content-inner {
+           
+         
+            padding: 20px;
+        }
+
+        /* Disable text selection while dragging */
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
     </style>
 </head>
 <body>
@@ -144,12 +171,19 @@
             <a href="manage_sponsor.php">Manage Sponsors</a>
         </div>
 
+
+        <div class="nav-link with-sub" onclick="toggleMenu(this)">Members</div>
+        <div class="sub-menu">
+            <a href="admin_add_members.php">Add member</a>
+            <a href="manage_members.php">Manage members</a>
+        </div>
+
         <a href="../logout.php" class="nav-link">Logout</a>
 
     </div>
 
     <div class="content" id="mainContent">
-        <!-- Your main content goes here -->
+    <div class="content-inner">
    
 
     <script>
@@ -204,5 +238,48 @@
             }
         });
     </script>
+
+
+
+
+<script>
+    const contentDiv = document.getElementById('mainContent');
+    
+    let isDown = false;
+    let startX, startY, scrollLeft, scrollTop;
+
+    contentDiv.addEventListener('mousedown', (e) => {
+        isDown = true;
+        contentDiv.classList.add('no-select'); // Prevent text selection
+        contentDiv.style.cursor = 'grabbing';
+        startX = e.pageX - contentDiv.offsetLeft;
+        startY = e.pageY - contentDiv.offsetTop;
+        scrollLeft = contentDiv.scrollLeft;
+        scrollTop = contentDiv.scrollTop;
+    });
+
+    contentDiv.addEventListener('mouseleave', () => {
+        isDown = false;
+        contentDiv.classList.remove('no-select');
+        contentDiv.style.cursor = 'grab';
+    });
+
+    contentDiv.addEventListener('mouseup', () => {
+        isDown = false;
+        contentDiv.classList.remove('no-select');
+        contentDiv.style.cursor = 'grab';
+    });
+
+    contentDiv.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - contentDiv.offsetLeft;
+        const y = e.pageY - contentDiv.offsetTop;
+        const walkX = (x - startX) * 1; // Adjust scrolling speed
+        const walkY = (y - startY) * 1; // Adjust scrolling speed
+        contentDiv.scrollLeft = scrollLeft - walkX;
+        contentDiv.scrollTop = scrollTop - walkY;
+    });
+</script>
 </body>
 </html>

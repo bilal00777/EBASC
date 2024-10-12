@@ -23,7 +23,7 @@
             background-color: #B7305E;
             padding-top: 20px;
             transition: transform 0.3s;
-            transform: translateX(0); /* Hidden initially */
+            transform: translateX(0);
         }
 
         .sidebar a, .nav-link {
@@ -47,7 +47,7 @@
             padding: 10px;
             position: fixed;
             top: 15px;
-            left: 260px;
+            left: 200px;
             z-index: 10;
             transition: left 0.3s;
         }
@@ -57,7 +57,7 @@
             margin-left: 250px;
             padding: 16px;
             transition: margin-left 0.3s;
-            overflow:scroll;
+            overflow: auto;
         }
 
         /* When sidebar is open */
@@ -71,7 +71,7 @@
 
         /* Move the hamburger when sidebar is open */
         .hamburger.active {
-            left: 10px; /* Adjust based on sidebar width */
+            left: 10px;
         }
 
         /* Header styles */
@@ -89,15 +89,28 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
         }
 
         .nav-link.with-sub::after {
-            content: '\25B6'; /* Right arrow for inactive links with submenus */
+            /* content: '\25B6'; Right arrow for inactive links with submenus */
             font-size: 14px;
         }
 
         .nav-link.with-sub.active::after {
             content: '\25BC'; /* Down arrow for active links with submenus */
+            padding: 10px 60%;
+           
+        }
+
+
+        .nav-link{
+            color:white;
+            font-weight:500;
         }
 
         .sub-menu {
@@ -119,7 +132,7 @@
         }
 
         .sub-menu a.active {
-            background-color: #9c325a; /* Active sub-link with fade-out background */
+            background-color: #9c325a;
         }
 
         /* Show the sub-menu when active */
@@ -127,30 +140,19 @@
             display: block;
         }
 
-
-
-
         #mainContent {
-          
             overflow: auto;
             border: 2px solid #ccc;
             position: relative;
             cursor: grab;
         }
 
-        /* Optional: Large content inside to demonstrate scrolling */
         .content-inner {
-           
-         
             padding: 20px;
         }
 
-        /* Disable text selection while dragging */
         .no-select {
             user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
         }
     </style>
 </head>
@@ -161,16 +163,13 @@
     </header>
 
     <div class="sidebar" id="sidebar">
-        <!-- Main nav links without sub-menus -->
         <a href="admin_dashboard.php" class="nav-link">Dashboard</a>
 
-        <!-- Nav link with sub-menu (e.g., Sponsors) -->
         <div class="nav-link with-sub" onclick="toggleMenu(this)">Sponsors</div>
         <div class="sub-menu">
             <a href="add_sponsor.php">Add Sponsor</a>
             <a href="manage_sponsor.php">Manage Sponsors</a>
         </div>
-
 
         <div class="nav-link with-sub" onclick="toggleMenu(this)">Members</div>
         <div class="sub-menu">
@@ -178,13 +177,28 @@
             <a href="manage_members.php">Manage members</a>
         </div>
 
-        <a href="../logout.php" class="nav-link">Logout</a>
 
+
+        <div class="nav-link with-sub" onclick="toggleMenu(this)">Accounts</div>
+        <div class="sub-menu">
+            <a href="admin_transactions.php">transactions</a>
+            <a href="balence_sheet.php">balance sheet</a>
+            <a href="all_transactions.php">transactions</a>
+        </div>
+
+        <a href="../logout.php" class="nav-link">Logout</a>
     </div>
 
     <div class="content" id="mainContent">
-    <div class="content-inner">
-   
+        <div class="content-inner">
+            <!-- Main content goes here -->
+       
+
+
+
+
+
+
 
     <script>
         // Toggle Sidebar
@@ -237,49 +251,45 @@
                 link.closest('.sub-menu').previousElementSibling.classList.add('active');
             }
         });
+
+        // Dragging scroll behavior for the main content
+        const contentDiv = document.getElementById('mainContent');
+        
+        let isDown = false;
+        let startX, startY, scrollLeft, scrollTop;
+
+        contentDiv.addEventListener('mousedown', (e) => {
+            isDown = true;
+            contentDiv.classList.add('no-select');
+            contentDiv.style.cursor = 'grabbing';
+            startX = e.pageX - contentDiv.offsetLeft;
+            startY = e.pageY - contentDiv.offsetTop;
+            scrollLeft = contentDiv.scrollLeft;
+            scrollTop = contentDiv.scrollTop;
+        });
+
+        contentDiv.addEventListener('mouseleave', () => {
+            isDown = false;
+            contentDiv.classList.remove('no-select');
+            contentDiv.style.cursor = 'grab';
+        });
+
+        contentDiv.addEventListener('mouseup', () => {
+            isDown = false;
+            contentDiv.classList.remove('no-select');
+            contentDiv.style.cursor = 'grab';
+        });
+
+        contentDiv.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - contentDiv.offsetLeft;
+            const y = e.pageY - contentDiv.offsetTop;
+            const walkX = (x - startX);
+            const walkY = (y - startY);
+            contentDiv.scrollLeft = scrollLeft - walkX;
+            contentDiv.scrollTop = scrollTop - walkY;
+        });
     </script>
-
-
-
-
-<script>
-    const contentDiv = document.getElementById('mainContent');
-    
-    let isDown = false;
-    let startX, startY, scrollLeft, scrollTop;
-
-    contentDiv.addEventListener('mousedown', (e) => {
-        isDown = true;
-        contentDiv.classList.add('no-select'); // Prevent text selection
-        contentDiv.style.cursor = 'grabbing';
-        startX = e.pageX - contentDiv.offsetLeft;
-        startY = e.pageY - contentDiv.offsetTop;
-        scrollLeft = contentDiv.scrollLeft;
-        scrollTop = contentDiv.scrollTop;
-    });
-
-    contentDiv.addEventListener('mouseleave', () => {
-        isDown = false;
-        contentDiv.classList.remove('no-select');
-        contentDiv.style.cursor = 'grab';
-    });
-
-    contentDiv.addEventListener('mouseup', () => {
-        isDown = false;
-        contentDiv.classList.remove('no-select');
-        contentDiv.style.cursor = 'grab';
-    });
-
-    contentDiv.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - contentDiv.offsetLeft;
-        const y = e.pageY - contentDiv.offsetTop;
-        const walkX = (x - startX) * 1; // Adjust scrolling speed
-        const walkY = (y - startY) * 1; // Adjust scrolling speed
-        contentDiv.scrollLeft = scrollLeft - walkX;
-        contentDiv.scrollTop = scrollTop - walkY;
-    });
-</script>
 </body>
 </html>

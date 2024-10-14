@@ -15,6 +15,7 @@ require('fpdf/fpdf.php'); // Include FPDF library
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 $fromDate = isset($_GET['from_date']) ? $_GET['from_date'] : '';
 $toDate = isset($_GET['to_date']) ? $_GET['to_date'] : '';
+$pdfHeading = isset($_GET['pdf_heading']) ? $_GET['pdf_heading'] : 'Balance Sheet'; // Use default heading if not set
 
 // Build the SQL query for expenses with search and date range filtering
 $expenseQuery = "SELECT * FROM transactions WHERE transaction_type = 'expense'";
@@ -59,15 +60,42 @@ $incomes = $incomeStmt->fetchAll(PDO::FETCH_ASSOC);
 $totalExpense = 0;
 $totalIncome = 0;
 
+// Get current date
+$currentDate = date('Y-m-d');
+
 // PDF generation process
 class PDF extends FPDF
 {
+    protected $customHeading;
+
+    // Constructor to receive heading
+    function __construct($heading)
+    {
+        parent::__construct();
+        $this->customHeading = $heading;
+    }
+
     // Page header
     function Header()
     {
-        $this->SetFont('Arial', 'B', 12);
-        $this->Cell(0, 10, 'Balance Sheet', 0, 1, 'C');
-        $this->Ln(10);
+        // Add the logo at the center (adjusted to avoid overlap)
+        $this->Image('../logo/ebasc logo.png', 80, 10, 50, 0, 'PNG'); // Adjust as per logo size and center it
+        $this->Ln(40); // Space below the logo (to avoid overlapping with the headings)
+
+        // Add Heading: ERATTIL BROTHERS ARTS AND SPORTS CLUB (centered at the top)
+        $this->SetFont('Arial', 'B', 16);
+        $this->Cell(0, 40, 'ERATTIL BROTHERS ARTS AND SPORTS CLUB', 0, 1, 'C');
+        $this->Ln(0); // Space after club name
+
+        // Add Sub-heading (centered)
+        $this->SetFont('Arial', 'B', 14);
+        $this->Cell(0,1, $this->customHeading, 0, 1, 'C');
+        $this->Ln(0); // Extra line break after heading
+
+        // Add Current Date (right-top)
+        $this->SetFont('Arial', '', 10);
+        $this->Cell(0, 10, 'Date: ' . date('Y-m-d'), 0, 0, 'R');
+        $this->Ln(15); // Space between date and table
     }
 
     // Page footer
@@ -77,17 +105,32 @@ class PDF extends FPDF
         $this->SetFont('Arial', 'I', 8);
         $this->Cell(0, 10, 'Page ' . $this->PageNo(), 0, 0, 'C');
     }
+
+    // Function to set styled header with background color and white text
+    function StyledTableHeader()
+    {
+        // Background color for the headers (purple)
+        $this->SetFillColor(129, 27, 132); // #811B84
+        $this->SetTextColor(255, 255, 255); // White
+
+        // Header cells
+        $this->Cell(95, 10, 'Expense', 1, 0, 'C', true);
+        $this->Cell(95, 10, 'Income', 1, 1, 'C', true);
+
+        // Reset colors for the rest of the table
+        $this->SetTextColor(0, 0, 0); // Black text for table content
+    }
 }
 
-// Create instance of PDF class
-$pdf = new PDF();
+// Create instance of PDF class with the custom heading
+$pdf = new PDF($pdfHeading);
 $pdf->AddPage();
 $pdf->SetFont('Arial', '', 12);
 
-// Table headers
-$pdf->Cell(95, 10, 'Expense', 1, 0, 'C');
-$pdf->Cell(95, 10, 'Income', 1, 1, 'C');
+// Add styled table headers
+$pdf->StyledTableHeader();
 
+// Add second row of table headers
 $pdf->Cell(30, 10, 'Date', 1);
 $pdf->Cell(40, 10, 'Particulars', 1);
 $pdf->Cell(25, 10, 'Amount', 1);
@@ -138,6 +181,13 @@ $pdf->Ln();
 $pdf->Cell(140, 10, 'Net Balance', 1);
 $pdf->Cell(50, 10, number_format($totalIncome - $totalExpense, 2), 1);
 
-// Output the generated PDF
-$pdf->Output('D', 'balance_sheet.pdf');
+// Generate the output file name based on the heading and save the file
+$outputFileName = str_replace(' ', '_', $pdfHeading) . '-ebasc.pdf';
+// For Preview: Display PDF in browser
+$pdf->Output('I', $outputFileName);  // Use 'I' for inline display in browser
+
+// For Download: Uncomment this if you want to force download
+// $pdf->Output('D', $outputFileName); // Use 'D' for download
+
+
 exit();

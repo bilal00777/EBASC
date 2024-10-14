@@ -167,15 +167,60 @@ $totalIncome = 0;
 
 
 
-
+<!-- PDF Action Buttons -->
 <div class="mb-3 text-end">
-        <!-- PDF download link -->
-        <a href="balance_sheet_pdf.php?search=<?php echo urlencode($searchTerm); ?>&from_date=<?php echo $fromDate; ?>&to_date=<?php echo $toDate; ?>" class="btn btn-danger">Download PDF</a>
+    <!-- Preview PDF Button -->
+    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#pdfPreviewModal">Preview PDF</button>
+
+    <!-- Download PDF Button triggers the modal -->
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#pdfModal">Download PDF</button>
+</div>
+
+<!-- Modal for PDF Preview -->
+<div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pdfPreviewModalLabel">PDF Preview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Iframe to display the PDF Preview -->
+        <iframe id="pdfPreviewIframe" style="width: 100%; height: 500px;" frameborder="0"></iframe>
+      </div>
     </div>
+  </div>
+</div>
 
+<!-- Modal for updating PDF heading for download -->
+<div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pdfModalLabel">Customize PDF Heading</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="pdfForm" method="GET" action="balance_sheet_pdf.php" target="_blank">
+          <div class="mb-3">
+            <label for="pdfHeading" class="form-label">PDF Heading</label>
+            <input type="text" class="form-control" id="pdfHeading" name="pdf_heading" placeholder="Enter custom heading">
+          </div>
 
+          <!-- Hidden inputs to pass search, date filters -->
+          <input type="hidden" name="search" value="<?php echo htmlspecialchars($searchTerm); ?>">
+          <input type="hidden" name="from_date" value="<?php echo htmlspecialchars($fromDate); ?>">
+          <input type="hidden" name="to_date" value="<?php echo htmlspecialchars($toDate); ?>">
 
-
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger">Download PDF</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -183,6 +228,21 @@ $totalIncome = 0;
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 
+<script>
+    document.querySelector('#pdfPreviewModal').addEventListener('show.bs.modal', function () {
+        // Get the input values from the form
+        const pdfHeading = document.querySelector('#pdfHeading').value || 'Balance Sheet';
+        const search = document.querySelector('input[name="search"]').value;
+        const fromDate = document.querySelector('input[name="from_date"]').value;
+        const toDate = document.querySelector('input[name="to_date"]').value;
+
+        // Construct the URL for PDF preview
+        const previewUrl = `balance_sheet_pdf.php?pdf_heading=${encodeURIComponent(pdfHeading)}&search=${encodeURIComponent(search)}&from_date=${encodeURIComponent(fromDate)}&to_date=${encodeURIComponent(toDate)}`;
+
+        // Set the iframe src to display the PDF preview
+        document.querySelector('#pdfPreviewIframe').src = previewUrl;
+    });
+</script>
 
 
 </body>

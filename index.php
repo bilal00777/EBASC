@@ -632,7 +632,7 @@ session_start();
         <div class="row">
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card wow animate__fadeInUp" data-wow-duration="1s">
-                    <img src="images/epl.jpg" class="card-img-top" alt="Erattil Football League">
+                    <img src="images/ecl.jpg" class="card-img-top" alt="Erattil Football League">
                     <div class="card-body">
                         <h5 class="card-title">EPL</h5>
                         <p class="card-text">ERATTIL Premier League is a top-tier football league showcasing intense local talent and competition</p>
@@ -641,7 +641,7 @@ session_start();
             </div>
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card wow animate__fadeInUp" data-wow-duration="1s">
-                    <img src="images/ecl.jpg" class="card-img-top" alt="Erattil Cricket League">
+                    <img src="images/epl.jpg" class="card-img-top" alt="Erattil Cricket League">
                     <div class="card-body">
                         <h5 class="card-title">ECL</h5>
                         <p class="card-text">The Erattil Cricket League showcases local talent, thrilling matches, and vibrant community engagement.</p>

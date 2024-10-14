@@ -162,7 +162,117 @@ $totalIncome = 0;
     </table>
 </div>
 
+
+
+
+
+
+
+
+
+<!-- Download PDF Button -->
+<button type="button" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#pdfModal">
+    Download PDF
+</button>
+
+<!-- PDF Modal -->
+<div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pdfModalLabel">Generate PDF</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <form id="pdfForm" action="generate_pdf.php" method="POST">
+    <div class="mb-3">
+        <label for="pdfHeading" class="form-label">PDF Heading</label>
+        <input type="text" class="form-control" id="pdfHeading" name="pdfHeading" placeholder="Enter a heading for the PDF" required>
+    </div>
+    
+    <input type="hidden" name="expenses" id="expensesData">
+    <input type="hidden" name="incomes" id="incomesData">
+    <input type="hidden" name="totalExpense" id="totalExpenseData">
+    <input type="hidden" name="totalIncome" id="totalIncomeData">
+    <input type="hidden" name="netBalance" id="netBalanceData">
+    <button type="submit" class="btn btn-primary">Download PDF</button>
+</form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 <!-- Bootstrap JS (Optional) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+  function collectTableData() {
+    const expenses = [];
+    const incomes = [];
+
+    // Get all rows from the table body
+    const rows = document.querySelectorAll('tbody tr');
+
+    rows.forEach(row => {
+        const expenseDate = row.querySelector('td:nth-child(1)').innerText.trim();
+        const expenseParticulars = row.querySelector('td:nth-child(2)').innerText.trim();
+        const expenseAmount = row.querySelector('td:nth-child(3)').innerText.trim();
+        const incomeDate = row.querySelector('td:nth-child(4)').innerText.trim();
+        const incomeParticulars = row.querySelector('td:nth-child(5)').innerText.trim();
+        const incomeAmount = row.querySelector('td:nth-child(6)').innerText.trim();
+
+        if (expenseDate || expenseParticulars || expenseAmount) {
+            expenses.push({
+                date: expenseDate,
+                particulars: expenseParticulars,
+                amount: expenseAmount
+            });
+        }
+
+        if (incomeDate || incomeParticulars || incomeAmount) {
+            incomes.push({
+                date: incomeDate,
+                particulars: incomeParticulars,
+                amount: incomeAmount
+            });
+        }
+    });
+
+    // Debug collected data in the browser console
+    console.log("Expenses Data:", expenses);
+    console.log("Incomes Data:", incomes);
+
+    // Set the form hidden fields with the collected data as JSON strings
+    document.getElementById('expensesData').value = JSON.stringify(expenses);
+    document.getElementById('incomesData').value = JSON.stringify(incomes);
+    document.getElementById('totalExpenseData').value = document.querySelector('tfoot td:nth-child(3)').innerText.trim();
+    document.getElementById('totalIncomeData').value = document.querySelector('tfoot td:nth-child(6)').innerText.trim();
+    document.getElementById('netBalanceData').value = document.querySelector('tfoot td:nth-child(6)').innerText.trim();
+}
+
+document.getElementById('pdfForm').addEventListener('submit', function (event) {
+    collectTableData();  // Collect table data before form submission
+});
+
+
+
+document.getElementById('pdfForm').addEventListener('submit', function (event) {
+    collectTableData();  // Collect table data before form submission
+    console.log('Form data prepared for submission');
+});
+
+
+</script>
+
+
+
+
 </body>
 </html>

@@ -1,8 +1,65 @@
 <?php
-// Start a session to store success or error messages
 session_start();
-?>
+include 'config/config.php'; // Database connection
+include 'includes/function.php'; // Helper functions
 
+$signup_error = ''; // Variable for sign-up error message
+$success = ''; // Variable for success message
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['login'])) {
+        // Login form handling
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        $user = loginUser($pdo, $email, $password);
+
+        if ($user) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['role'] = $user['role'];
+            header('Location: user/userdashboard.php');
+            exit();
+        } else {
+            $error = "Invalid email or password.";
+            echo "<script>
+            window.addEventListener('load', function() {
+                var myModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                myModal.show();
+            });
+            </script>";
+        }
+    } elseif (isset($_POST['signup'])) {
+        // Sign-up form handling
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $email = $_POST['signup_email'];
+        $password = password_hash($_POST['signup_password'], PASSWORD_DEFAULT); // Hash password
+
+        // Check if user already exists
+        $userExists = checkUserExists($pdo, $email);
+
+        if ($userExists) {
+            $signup_error = "User already exists with this email.";
+        } else {
+            // Insert the new user
+            $userCreated = createUser($pdo, $first_name, $last_name, $email, $password);
+
+            if ($userCreated) {
+                // Success: Redirect to a new modal
+                $success = "User registered successfully.";
+                echo "<script>
+                    window.addEventListener('load', function() {
+                        var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+                        myModal.show();
+                    });
+                    </script>";
+            } else {
+                $signup_error = "Error occurred during registration.";
+            }
+        }
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,474 +68,180 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Erattil Brothers Arts and Sports Club</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- icon -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
-    <style>
-        body {
-            background: linear-gradient(to right, #FF4B2B, #3A00B5);
-            color: white;
-            text-align: center;
-      
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            
-        }
-
-        .logo-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            width: 500px;
-            height: 500px;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s ease;
-        }
-
-        .logo {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .content {
-            margin-top: 350px;
-        }
-
-        .hero_section h1 {
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #FFE005;
-        }
-
-        .hero_section p {
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-
-        .container{
-            z-index: 1000 !important;
-        }
-
-        .content {
-            margin-top: 700px;
-            /* Pushed content down below the logo */
-        }
-        
-
-
-
-        .social_icon svg:hover {
-    transform: scale(1.05); /* Slightly enlarges the icon */
-    opacity: 0.8; /* Reduces the opacity slightly */
-    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
-}
-
-
-
-/* ----------------------------- */
-
-
-/* SPONSORS LOGO  */
-/* ----------------------------- */
-.sponsors-section {
-           
-            padding: 20px 0;
-            text-align: center;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .sponsors-section h2 {
-            color: white;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .sponsors-container {
-            display: inline-flex;
-            align-items: center;
-            justify-content: flex-start;
-            white-space: nowrap;
-            position: relative;
-        }
-
-        .sponsor-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #ccc;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #555;
-            margin-left: 40px;
-        }
-
-
-
-
-        /* ----------------------------- */
-
-
-/* feild-section  */
-/* ----------------------------- */
-
-.feild-section{
-    padding: 20px 0;
-            text-align: center;
-            overflow: hidden;
-            white-space: wrap;
-}
-
-
-.feild-section h2{
-    color: white;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-weight: bold; 
-            text-transform: uppercase;
-}
-
-
-
-.feild-section p{
-    color: #FFE005;
-            font-size: 18px;
-            margin-bottom: 20px;
-            font-weight: bold; 
-}
-
-
-
-.feild-section .card .card-title{
-    text-align: left;
-}
-
-.feild-section .card .card-text{
-    text-align: left;
-    color: #555;
-
-}
-
-.feild-section .card img{
-    aspect-ratio: 3/2;
-    object-fit: contain;
-    background-color: #000;
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   
-}
-
-
-
-
-
-   /* ----------------------------- */
-
-
-/* carosel  */
-/* ----------------------------- */
-
-.carousel-item {
-            height: 100vh; /* Adjusts carousel height to full viewport height */
-        }
-        .carousel-caption {
-            right: 0;
-            left: auto;
-            text-align: right;
-            bottom: 30px; /* Adjusts bottom position */
-        }
-        .carousel-caption h5,
-        .carousel-caption p {
-            color: rgb(255, 255, 255); /* Makes text color white for contrast */
-            padding-right: 20px;
-        }
-        @media (max-width: 767.98px) {
-            .carousel-caption {
-                bottom: 15px; /* Adjusts bottom position for smaller screens */
-                text-align: center;
-                left: 0;
-                right: 0;
-            }
-            .carousel-item {
-            height: fit-content; /* Adjusts carousel height to full viewport height */
-        }
-        }
-
-
-
-
-
-        /* ----------------------------- */
-
-
-/* about-section  */
-/* ----------------------------- */
-
-.about-section{
-    padding: 20px 0;
-            text-align: center;
-            overflow: hidden;
-            white-space: wrap;
-}
-
-
-.about-section h2{
-    color: white;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-weight: bold; 
-            text-transform: uppercase;
-}
-
-
-
-.about-section p{
-    color: #FFE005;
-            font-size: 18px;
-            margin-bottom: 20px;
-            font-weight: bold; 
-}
-
-
-.about-us-image {
-            max-width: 100%;
-            height: auto;
-        }
-        .about-us-text {
-            display: flex;
-            flex-wrap: wrap;
-            
-            flex-direction: column;
-            justify-content: center;
-        }
-        .about-us-text h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .about-us-text p {
-            font-size: 1.125rem;
-            line-height: 1.6;
-            color: #e9dfdf !important   ;
-            text-align: left;
-        }
-
-
-
-
-
-
-
-        /* ----------------------------- */
-
-
-/* photo-section  */
-/* ----------------------------- */
-
-.photo-section{
-    padding: 20px 0;
-            text-align: center;
-            overflow: hidden;
-            white-space: nowrap;
-}
-
-
-.photo-section h2{
-    color: white;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-weight: bold; 
-            text-transform: uppercase;
-}
-
-
-
-.photo-section p{
-    color: #FFE005;
-            font-size: 18px;
-            margin-bottom: 20px;
-            font-weight: bold; 
-}
-
-
-/* left to right */
-.scrolling-logos {
-            overflow: hidden;
-            white-space: nowrap;
-            box-sizing: content-box;
-            padding: 20px 0;
-        }
-        .scrolling-logos img {
-            height: 200px;
-            width: 400px;
-            display: inline-block;
-            margin-right: 20px; /* Space between images */
-        }
-        .scrolling-logos-wrapper {
-            display: flex;
-            animation: scroll 20s linear infinite;
-        }
-        @keyframes scroll {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-
-
-
-        /* right to left */
-
-
-        .scrolling-logos2 {
-            overflow: hidden;
-            white-space: nowrap;
-            box-sizing: content-box;
-            padding: 20px 0;
-        }
-        .scrolling-logos2 img {
-            height: 200px;
-            width: 400px;
-            display: inline-block;
-            margin-right: 20px; /* Space between images */
-        }
-        .scrolling-logos-wrapper2 {
-            display: flex;
-            animation: scroll2 20s linear infinite;
-        }
-        @keyframes scroll2 {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(0);
-            }
-        }
-
-
-        /* left to right */
-.scrolling-logos3 {
-            overflow: hidden;
-            white-space: nowrap;
-            box-sizing: content-box;
-            padding: 20px 0;
-        }
-        .scrolling-logos3 img {
-            height: 200px;
-            width: 400px;
-            display: inline-block;
-            margin-right: 20px; /* Space between images */
-        }
-        .scrolling-logos-wrapper3 {
-            display: flex;
-            animation: scroll3 20s linear infinite;
-        }
-        @keyframes scroll3 {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-
-
-
-        
-        /* ----------------------------- */
-
-
-/* contact-section  */
-/* ----------------------------- */
-
-.contact-section{
-    padding: 20px 0;
-            text-align: center;
-            overflow: hidden;
-            white-space: wrap;
-}
-
-
-.contact-section h2{
-    color: white;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-weight: bold; 
-            text-transform: uppercase;
-}
-
-
-
-.contact-section p{
-    color: #FFE005;
-            font-size: 18px;
-            margin-bottom: 20px;
-            font-weight: bold; 
-}
-
-.contact-section iframe{
-    border-radius: 10px;
-}
-
-.addressws{
-    padding-left: 30px;
-}
-
-
-
-/* footer */
-.footer {
-    background: linear-gradient(91deg, #000 -43.7%, #290255 133.92%);
-            padding: 40px 0;
-        }
-        .footer-logo {
-            max-width: 100px;
-        }
-        .footer-heading {
-            font-size: 1.75rem;
-            margin-bottom: 10px;
-        }
-        .footer-subheading {
-            font-size: 1.125rem;
-            margin-bottom: 20px;
-        }
-        .footer-icons a {
-            color: #343a40;
-            margin-right: 15px;
-            font-size: 1.5rem;
-        }
-        .footer-icons a:hover {
-            color: #007bff;
-        }
-        .footer-copy {
-            font-size: 0.875rem;
-        }
-
-
-
-    </style>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+  <!-- style -->
+  <link rel="stylesheet" href="style.css">
+    
 </head>
-
+  <style>
+    /* Navbar collapsed (hidden) */
+.navbar-collapsed {
+    top: -79px; /* Height of the navbar */
+}
+  </style>
 <body>
     <div class="logo-container" id="logoContainer">
         <img src="logo/ebasc logo.png" alt="Erattil Brothers Logo" class="logo">
     </div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top">
+    <div class="container-fluid">
+      <!-- Left Side: Logo -->
+      <a class="navbar-brand" href="#">
+        <img src="https://via.placeholder.com/150x50" alt="Logo">
+      </a>
+
+      <!-- Navbar Toggler for mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <!-- Right Side: Navigation Links -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active text-white" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Features</a>
+          </li>
+         
+        
+          <li class="nav-item">
+            <!-- Login Link triggers the modal -->
+            <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#authModal">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+<!-- Authentication Modal (Login/Sign-up) -->
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Login Form -->
+                    <form id="loginForm" method="post" action="index.php">
+                    <img src="logo/ebasc logo.png" alt="ebasc logo" style='height:100px;width:100px;'>
+                    <h3 class='cap-log'>Log in to unlock your journey!</h3>
+                        <div class="custom-group">
+                            <input required="" type="email" name="email" class="custom-input" id="loginEmail">
+                            <span class="custom-highlight"></span>
+                            <span class="custom-bar"></span>
+                            <label class="custom-label" for="loginEmail">Email address</label>
+                        </div>
+                        <div class="custom-group">
+                            <input required="" type="password" name="password" class="custom-input" id="loginPassword">
+                            <span class="custom-highlight"></span>
+                            <span class="custom-bar"></span>
+                            <label class="custom-label" for="loginPassword">Password</label>
+                        </div>
+                        <div class="mb-3 text-end">
+                            <a href="#" class="small">Forgotten password?</a>
+                        </div>
+                        <button type="submit" name="login" class="btn btn-primary w-100">Login</button>
+                    </form>
+
+                    <?php if (isset($error)) echo '<p>' . $error . '</p>'; ?>
+
+                    <!-- Sign-up Form (Initially hidden) -->
+                    <form id="signUpForm" method="post" action="index.php" style="display:none;">
+                        <img src="logo/ebasc logo.png" alt="ebasc logo" style='height:100px;width:100px;'>
+                        <h3 class='cap-log'>Join us today and start something amazing!</h3>
+                        <div class="custom-group">
+                            <input required="" type="text" name="first_name" class="custom-input" id="signUpFirstName">
+                            <span class="custom-highlight"></span>
+                            <span class="custom-bar"></span>
+                            <label class="custom-label" for="signUpFirstName">First Name</label>
+                        </div>
+                        <div class="custom-group">
+                            <input required="" type="text" name="last_name" class="custom-input" id="signUpLastName">
+                            <span class="custom-highlight"></span>
+                            <span class="custom-bar"></span>
+                            <label class="custom-label" for="signUpLastName">Last Name</label>
+                        </div>
+                        <div class="custom-group">
+                            <input required="" type="email" name="signup_email" class="custom-input" id="signUpEmail">
+                            <span class="custom-highlight"></span>
+                            <span class="custom-bar"></span>
+                            <label class="custom-label" for="signUpEmail">Email address</label>
+                        </div>
+                        <div class="custom-group">
+                            <input required="" type="password" name="signup_password" class="custom-input" id="signUpPassword">
+                            <span class="custom-highlight"></span>
+                            <span class="custom-bar"></span>
+                            <label class="custom-label" for="signUpPassword">Password</label>
+                        </div>
+                        <br>
+                        <button type="submit" name="signup" class="btn btn-success w-100">Sign Up</button>
+                    </form>
+
+                    <?php if ($signup_error) echo '<p class="text-danger">' . $signup_error . '</p>'; ?>
+                </div>
+                <div class="modal-footer">
+                    <p class="w-100 text-center">
+                        <span id="formSwitchText">Don't have an account? </span>
+                        <a href="#" id="formSwitchLink" class="btn btn-log w-100">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal (To show success message after sign-up) -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success" id="successModalLabel">Success</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p style='color:black'><?php echo $success; ?></p>
+                    <button class="btn btn-primary" id="backToLogin">Back to Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success" id="successModalLabel">error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p style='color:black'><?php echo $error; ?></p>
+                    <button class="btn btn-primary" id="backToLogin_from">try again..</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
     <div class="container hero_section content">
        
        
@@ -941,13 +704,91 @@ session_start();
 </script>
 <!-- -------------end---------------- -->
 
+<script>
+        // Script to switch between Login and Sign-up forms
+        const loginForm = document.getElementById('loginForm');
+        const signUpForm = document.getElementById('signUpForm');
+        const formSwitchLink = document.getElementById('formSwitchLink');
+        const formSwitchText = document.getElementById('formSwitchText');
+        const authModalLabel = document.getElementById('authModalLabel');
+        const backToLogin = document.getElementById('backToLogin');
+
+        let isLogin = true;
+
+        formSwitchLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (isLogin) {
+                // Switch to Sign-up form
+                loginForm.style.display = 'none';
+                signUpForm.style.display = 'block';
+                formSwitchText.textContent = 'Already have an account? ';
+                formSwitchLink.textContent = 'Login';
+                authModalLabel.textContent = 'Sign Up';
+            } else {
+                // Switch to Login form
+                signUpForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                formSwitchText.textContent = "Don't have an account? ";
+                formSwitchLink.textContent = 'Sign up';
+                authModalLabel.textContent = 'Login';
+            }
+            isLogin = !isLogin; // Toggle form state
+        });
+
+        // Handle back to login after successful signup
+        if (backToLogin) {
+            backToLogin.addEventListener('click', function () {
+                var authModal = new bootstrap.Modal(document.getElementById('authModal'));
+                authModal.show(); // Show the login modal again
+                var successModal = bootstrap.Modal.getInstance(document.getElementById('successModal'));
+                successModal.hide(); // Hide the success modal
+                 });
+        }
 
 
+       
+    </script>
 
-<!-- Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Handle back to login after error modal is shown
+    var backToLoginBtn = document.getElementById('backToLogin_from');
+    if (backToLoginBtn) {
+        backToLoginBtn.addEventListener('click', function () {
+            var authModal = new bootstrap.Modal(document.getElementById('authModal'));
+            authModal.show(); // Show the login modal again
+            var errorModal = bootstrap.Modal.getInstance(document.getElementById('errorModal'));
+            errorModal.hide(); // Hide the error modal
+        });
+    }
+</script>
+
+
+<!-- navbar animation -->
+ <script>
+    // JavaScript to manage the navbar collapse on scroll behavior
+document.addEventListener("DOMContentLoaded", function() {
+    var navbar = document.querySelector('.navbar-custom');
+    var lastScrollTop = 0;
+
+    window.addEventListener('scroll', function() {
+        var currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScrollTop > lastScrollTop) {
+            // User is scrolling down - hide the navbar
+            navbar.classList.add('navbar-collapsed');
+        } else {
+            // User is scrolling up - show the navbar
+            navbar.classList.remove('navbar-collapsed');
+        }
+
+        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // Ensure lastScrollTop is never negative
+    });
+});
+
+ </script>
+ <!-- Bootstrap JS Bundle -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

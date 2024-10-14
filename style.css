@@ -1,0 +1,612 @@
+body {
+    background: linear-gradient(to right, #FF4B2B, #3A00B5);
+    color: white;
+    text-align: center;
+
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+
+/* ------------------ */
+/* navbar */
+/* ----------------------- */
+
+
+  /* Custom CSS for transparent background and blur effect */
+.navbar-custom {
+background-color: rgba(255, 255, 255, 0.1); /* Transparent background */
+backdrop-filter: blur(10px); /* Blur effect */
+-webkit-backdrop-filter: blur(10px); /* For Safari */
+transition: top 0.5s ease-in-out; /* Smooth transition for collapsing */
+}
+.navbar-brand img {
+max-height: 50px;
+}
+
+/* login */
+/* Custom Input Styles - Modified from Uiverse.io by G4b413l */
+.custom-group {
+position: relative;
+margin-top:30px;
+}
+
+.custom-input {
+font-size: 16px;
+padding: 10px 10px 10px 5px;
+display: block;
+width: 100%;
+border: none;
+border-bottom: 1px solid #515151;
+background: transparent;
+}
+
+.custom-input:focus {
+outline: none;
+}
+
+.custom-label {
+color: #999;
+font-size: 18px;
+font-weight: normal;
+position: absolute;
+pointer-events: none;
+left: 5px;
+top: 10px;
+transition: 0.2s ease all;
+}
+
+.custom-input:focus ~ .custom-label, .custom-input:valid ~ .custom-label {
+top: -20px;
+font-size: 14px;
+color: #5264AE;
+}
+
+.custom-bar {
+position: relative;
+display: block;
+width: 100%;
+}
+
+.custom-bar:before, .custom-bar:after {
+content: '';
+height: 2px;
+width: 0;
+bottom: 1px;
+position: absolute;
+background: #5264AE;
+transition: 0.2s ease all;
+}
+
+.custom-bar:before {
+left: 50%;
+}
+
+.custom-bar:after {
+right: 50%;
+}
+
+.custom-input:focus ~ .custom-bar:before, .custom-input:focus ~ .custom-bar:after {
+width: 50%;
+}
+
+.custom-highlight {
+position: absolute;
+height: 60%;
+width: 100px;
+top: 25%;
+left: 0;
+pointer-events: none;
+opacity: 0.5;
+}
+
+.custom-input:focus ~ .custom-highlight {
+animation: inputHighlighter 0.3s ease;
+}
+
+@keyframes inputHighlighter {
+from {
+background: #5264AE;
+}
+to {
+width: 0;
+background: transparent;
+}
+}
+
+
+
+
+.cap-log {
+color: #982473; /* Text color */
+-webkit-text-stroke: 1px black; /* White stroke with 2px width */
+font-size: 24px; /* You can adjust the font size as needed */
+font-weight: bold; /* Optional: make the text bold */
+}
+
+
+
+
+/* From Uiverse.io by CristianMontoya98 */ 
+.btn-log {
+
+margin: 0.5em;
+background: white;
+color: black;
+border-color:black ;
+border-radius: 0.625em;
+font-size: 20px;
+font-weight: bold;
+cursor: pointer;
+position: relative;
+z-index: 1;
+overflow: hidden;
+}
+
+.btn-log:hover {
+color: white;
+}
+
+.btn-log:after {
+content: "";
+background: black;
+position: absolute;
+z-index: -1;
+left: -20%;
+right: -20%;
+top: 0;
+bottom: 0;
+transform: skewX(-45deg) scale(0, 1);
+transition: all 0.5s;
+}
+
+.btn-log:hover:after {
+transform: skewX(-45deg) scale(1, 1);
+-webkit-transition: all 0.5s;
+transition: all 0.5s;
+}
+
+/* --------------------end------------------------- */
+.logo-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    height: 500px;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.content {
+    margin-top: 350px;
+}
+
+.hero_section h1 {
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #FFE005;
+}
+
+.hero_section p {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+
+.container{
+    z-index: 1000 !important;
+}
+
+.content {
+    margin-top: 700px;
+    /* Pushed content down below the logo */
+}
+
+
+
+
+.social_icon svg:hover {
+transform: scale(1.05); /* Slightly enlarges the icon */
+opacity: 0.8; /* Reduces the opacity slightly */
+transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+}
+
+
+
+/* ----------------------------- */
+
+
+/* SPONSORS LOGO  */
+/* ----------------------------- */
+.sponsors-section {
+   
+    padding: 20px 0;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.sponsors-section h2 {
+    color: white;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.sponsors-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    white-space: nowrap;
+    position: relative;
+}
+
+.sponsor-logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    margin-left: 40px;
+}
+
+
+
+
+/* ----------------------------- */
+
+
+/* feild-section  */
+/* ----------------------------- */
+
+.feild-section{
+padding: 20px 0;
+    text-align: center;
+    overflow: hidden;
+    white-space: wrap;
+}
+
+
+.feild-section h2{
+color: white;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold; 
+    text-transform: uppercase;
+}
+
+
+
+.feild-section p{
+color: #FFE005;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: bold; 
+}
+
+
+
+.feild-section .card .card-title{
+text-align: left;
+}
+
+.feild-section .card .card-text{
+text-align: left;
+color: #555;
+
+}
+
+.feild-section .card img{
+aspect-ratio: 3/2;
+object-fit: contain;
+background-color: #000;
+
+}
+
+
+
+
+
+/* ----------------------------- */
+
+
+/* carosel  */
+/* ----------------------------- */
+
+.carousel-item {
+    height: 100vh; /* Adjusts carousel height to full viewport height */
+}
+.carousel-caption {
+    right: 0;
+    left: auto;
+    text-align: right;
+    bottom: 30px; /* Adjusts bottom position */
+}
+.carousel-caption h5,
+.carousel-caption p {
+    color: rgb(255, 255, 255); /* Makes text color white for contrast */
+    padding-right: 20px;
+}
+@media (max-width: 767.98px) {
+    .carousel-caption {
+        bottom: 15px; /* Adjusts bottom position for smaller screens */
+        text-align: center;
+        left: 0;
+        right: 0;
+    }
+    .carousel-item {
+    height: fit-content; /* Adjusts carousel height to full viewport height */
+}
+}
+
+
+
+
+
+/* ----------------------------- */
+
+
+/* about-section  */
+/* ----------------------------- */
+
+.about-section{
+padding: 20px 0;
+    text-align: center;
+    overflow: hidden;
+    white-space: wrap;
+}
+
+
+.about-section h2{
+color: white;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold; 
+    text-transform: uppercase;
+}
+
+
+
+.about-section p{
+color: #FFE005;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: bold; 
+}
+
+
+.about-us-image {
+    max-width: 100%;
+    height: auto;
+}
+.about-us-text {
+    display: flex;
+    flex-wrap: wrap;
+    
+    flex-direction: column;
+    justify-content: center;
+}
+.about-us-text h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-align: left;
+}
+.about-us-text p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #e9dfdf !important   ;
+    text-align: left;
+}
+
+
+
+
+
+
+
+/* ----------------------------- */
+
+
+/* photo-section  */
+/* ----------------------------- */
+
+.photo-section{
+padding: 20px 0;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+
+.photo-section h2{
+color: white;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold; 
+    text-transform: uppercase;
+}
+
+
+
+.photo-section p{
+color: #FFE005;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: bold; 
+}
+
+
+/* left to right */
+.scrolling-logos {
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: content-box;
+    padding: 20px 0;
+}
+.scrolling-logos img {
+    height: 200px;
+    width: 400px;
+    display: inline-block;
+    margin-right: 20px; /* Space between images */
+}
+.scrolling-logos-wrapper {
+    display: flex;
+    animation: scroll 20s linear infinite;
+}
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
+
+
+/* right to left */
+
+
+.scrolling-logos2 {
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: content-box;
+    padding: 20px 0;
+}
+.scrolling-logos2 img {
+    height: 200px;
+    width: 400px;
+    display: inline-block;
+    margin-right: 20px; /* Space between images */
+}
+.scrolling-logos-wrapper2 {
+    display: flex;
+    animation: scroll2 20s linear infinite;
+}
+@keyframes scroll2 {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+
+/* left to right */
+.scrolling-logos3 {
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: content-box;
+    padding: 20px 0;
+}
+.scrolling-logos3 img {
+    height: 200px;
+    width: 400px;
+    display: inline-block;
+    margin-right: 20px; /* Space between images */
+}
+.scrolling-logos-wrapper3 {
+    display: flex;
+    animation: scroll3 20s linear infinite;
+}
+@keyframes scroll3 {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
+
+
+
+/* ----------------------------- */
+
+
+/* contact-section  */
+/* ----------------------------- */
+
+.contact-section{
+padding: 20px 0;
+    text-align: center;
+    overflow: hidden;
+    white-space: wrap;
+}
+
+
+.contact-section h2{
+color: white;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold; 
+    text-transform: uppercase;
+}
+
+
+
+.contact-section p{
+color: #FFE005;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: bold; 
+}
+
+.contact-section iframe{
+border-radius: 10px;
+}
+
+.addressws{
+padding-left: 30px;
+}
+
+
+
+/* footer */
+.footer {
+background: linear-gradient(91deg, #000 -43.7%, #290255 133.92%);
+    padding: 40px 0;
+}
+.footer-logo {
+    max-width: 100px;
+}
+.footer-heading {
+    font-size: 1.75rem;
+    margin-bottom: 10px;
+}
+.footer-subheading {
+    font-size: 1.125rem;
+    margin-bottom: 20px;
+}
+.footer-icons a {
+    color: #343a40;
+    margin-right: 15px;
+    font-size: 1.5rem;
+}
+.footer-icons a:hover {
+    color: #007bff;
+}
+.footer-copy {
+    font-size: 0.875rem;
+}
+
+

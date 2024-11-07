@@ -186,6 +186,14 @@
             <a href="all_transactions.php">transactions</a>
         </div>
 
+
+        <div class="nav-link with-sub" onclick="toggleMenu(this)">Collections</div>
+        <div class="sub-menu">
+            <a href="create_collections.php">Create Collections</a>
+            <a href="collection_list.php">collection list</a>
+           
+        </div>
+
         <a href="../logout.php" class="nav-link">Logout</a>
     </div>
 

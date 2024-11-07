@@ -1,4 +1,11 @@
 <?php
+session_start(); // Make sure session_start() is the first thing in the script
+
+// Check if the admin is logged in, if not, redirect to the login page
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: admin_login.php');
+    exit(); // Make sure to call exit() after header to stop script execution
+}
 // Include config.php for database connection
 include '../config/config.php';
 include '../includes/header.php';

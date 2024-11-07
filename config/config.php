@@ -1,4 +1,6 @@
 <?php
+
+
 // config/config.php
 
 $host = 'localhost';

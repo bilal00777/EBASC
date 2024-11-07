@@ -112,6 +112,7 @@ $collections = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <table class="table table-bordered">
         <thead>
             <tr>
+                <th>Sl No</th>
                 <th>ID</th>
                 <th>Heading</th>
                 <th>Amount</th>
@@ -122,9 +123,13 @@ $collections = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tr>
         </thead>
         <tbody>
-            <?php if (!empty($collections)) : ?>
+       
+            <?php if (!empty($collections)) :
+                 $slNo = 1; ?>
+                
                 <?php foreach ($collections as $collection) : ?>
                     <tr>
+                        <td><?php echo $slNo++; ?></td> <!-- Incremented Sl No -->
                         <td><?php echo htmlspecialchars($collection['id']); ?></td>
                         <td><?php echo htmlspecialchars($collection['heading']); ?></td>
                         <td><?php echo htmlspecialchars($collection['amount']); ?></td>

@@ -81,6 +81,7 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    
 <div class="container mt-5">
     <h1 class="mb-4">Members List for Collection: <?php echo htmlspecialchars($collection['heading']); ?></h1>
     <p><strong>Collection Amount:</strong> <?php echo htmlspecialchars($collection['amount']); ?></p>
@@ -89,7 +90,7 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Collection ID</th>
+                <!-- <th>Collection ID</th> -->
                 <th>Member ID</th>
                 <th>Member Name</th>
                 <th>Status</th>
@@ -101,7 +102,7 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php if (!empty($members)) : ?>
                 <?php foreach ($members as $member) : ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($member['collection_id']); ?></td>
+                        <!-- <td><?php echo htmlspecialchars($member['collection_id']); ?></td> -->
                         <td><?php echo htmlspecialchars($member['id']); ?></td>
                         <td><?php echo htmlspecialchars($member['member_name']); ?></td>
                         <td><?php echo htmlspecialchars($member['status']); ?></td>

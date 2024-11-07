@@ -15,6 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = htmlspecialchars($_POST['email']);
     $phone_number = htmlspecialchars($_POST['phone_number']);
     $address = htmlspecialchars($_POST['address']);
+    $role = htmlspecialchars($_POST['role']);
+    $category = htmlspecialchars($_POST['category']);
     
     // Handle file upload for the photo
     $photo = $_FILES['photo']['name'];
@@ -32,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $upload_file = $upload_dir . basename($photo);
 
     // Validate form data
-    if (empty($first_name) || empty($last_name) || empty($email) || empty($phone_number) || empty($address)) {
+    if (empty($first_name) || empty($last_name) || empty($email) || empty($phone_number) || empty($address) || empty($role) || empty($category)) {
         $error_message = "All fields are required.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error_message = "Invalid email format.";
@@ -40,14 +42,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Error uploading the photo.";
     } else {
         // Insert the new member details into the database
-        $stmt = $pdo->prepare("INSERT INTO members (first_name, last_name, email, phone_number, photo, address) 
-                               VALUES (:first_name, :last_name, :email, :phone_number, :photo, :address)");
+        $stmt = $pdo->prepare("INSERT INTO members (first_name, last_name, email, phone_number, photo, address, role, category) 
+                               VALUES (:first_name, :last_name, :email, :phone_number, :photo, :address, :role, :category)");
         $stmt->bindParam(':first_name', $first_name);
         $stmt->bindParam(':last_name', $last_name);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':phone_number', $phone_number);
         $stmt->bindParam(':photo', $upload_file); // Save the full file path
         $stmt->bindParam(':address', $address);
+        $stmt->bindParam(':role', $role);
+        $stmt->bindParam(':category', $category);
         
         if ($stmt->execute()) {
             $success_message = "New member added successfully!";
@@ -173,6 +177,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
         </div>
+
+        <div class="row">
+        <!-- Role Dropdown -->
+        <div class="col-md-6">
+        <div class="mb-3">
+            <label for="role" class="form-label">Role:</label>
+            <select name="role" id="role" class="form-control input" required>
+                <option value="member" selected>Member</option>
+                <option value="president">President</option>
+                <option value="vice president">Vice President</option>
+                <option value="secretary">Secretary</option>
+                <option value="joint secretary">Joint Secretary</option>
+                <option value="treasurer">Treasurer</option>
+                <option value="PRO">PRO</option>
+                <option value="CEO">CEO</option>
+            </select>
+        </div>
+    </div>
+
+        <!-- Category Dropdown -->
+        <div class="col-md-6">
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <select name="category" id="category" class="form-control input" required>
+                <option value="above 18 and in the country" selected>Above 18 and In the Country</option>
+                <option value="above 18 and out of the country">Above 18 and Out of the Country</option>
+                <option value="below 18 and in the country">Below 18 and In the Country</option>
+                <option value="below 18 and out of the country">Below 18 and Out of the Country</option>
+            </select>
+        </div>
+    </div>
+    </div>
+
 
         <!-- Submit Button -->
         <div class="row">

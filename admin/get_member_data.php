@@ -22,6 +22,7 @@ if (isset($_GET['id'])) {
             'email' => htmlspecialchars($member['email']),
             'phone_number' => htmlspecialchars($member['phone_number']),
             'role' => htmlspecialchars($member['role']),
+            'category' => htmlspecialchars($member['category']),
             'address' => htmlspecialchars($member['address']),
             'photo' => htmlspecialchars($member['photo'])  // Assuming the full path is stored in the database
         ]);

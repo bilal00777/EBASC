@@ -66,8 +66,9 @@ $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Username</th> <!-- New Column -->
-                <th>Password</th> <!-- New Column (hashed or masked) -->
+                <!-- <th>Password</th> New Column (hashed or masked) -->
                 <th>Role</th> <!-- New Column -->
+                <th  style="width:20px;">catagory</th> <!-- New Column -->
                 <th>Email</th>
                 <th>Phone Number</th>
                 <th>Photo</th>
@@ -87,8 +88,9 @@ $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo htmlspecialchars($member['first_name']); ?></td>
                         <td><?php echo htmlspecialchars($member['last_name']); ?></td>
                         <td><?php echo htmlspecialchars($member['username']); ?></td> <!-- Username Column -->
-                        <td><?php echo str_repeat('*', strlen($member['password'])); ?></td> <!-- Masked Password Column -->
+                        <!-- <td><?php echo str_repeat('*', strlen($member['password'])); ?></td> Masked Password Column -->
                         <td><?php echo htmlspecialchars($member['role']); ?></td> <!-- Role Column -->
+                        <td><?php echo htmlspecialchars($member['category']); ?></td> <!-- Role Column -->
                         <td><?php echo htmlspecialchars($member['email']); ?></td>
                         <td><?php echo htmlspecialchars($member['phone_number']); ?></td>
                         <td>
@@ -158,7 +160,7 @@ $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <div class="modal-body">
 
         <!-- Alert div for success or error messages -->
-        <div id="modalAlert" class="alert d-none"></div>
+        <!-- <div id="modalAlert" class="alert d-none"></div> -->
 
         <!-- Form for editing the member -->
         <form id="editMemberForm" enctype="multipart/form-data">
@@ -204,8 +206,26 @@ $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
                 <select class="form-control" id="role" name="role">
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
+                <option value="member" selected>Member</option>
+                <option value="president">President</option>
+                <option value="vice president">Vice President</option>
+                <option value="secretary">Secretary</option>
+                <option value="joint secretary">Joint Secretary</option>
+                <option value="treasurer">Treasurer</option>
+                <option value="PRO">PRO</option>
+                <option value="CEO">CEO</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="category" class="form-label">category</label>
+                <select class="form-control" id="category" name="category">
+                <option value="above 18 and in the country" selected>Above 18 and In the Country</option>
+                <option value="above 18 and out of the country">Above 18 and Out of the Country</option>
+                <option value="below 18 and in the country">Below 18 and In the Country</option>
+                <option value="below 18 and out of the country">Below 18 and Out of the Country</option>
+           
                 </select>
               </div>
             </div>
@@ -238,6 +258,22 @@ $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 
+<!-- Alert Modal -->
+<div id="alertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alertModalLabel">Notification</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-success" id="alertMessage">
+        <!-- Dynamic alert message will appear here -->
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- Delete Confirmation Modal -->
@@ -281,6 +317,7 @@ function openEditModal(memberId) {
             document.getElementById('email').value = data.email;
             document.getElementById('phone_number').value = data.phone_number;
             document.getElementById('role').value = data.role;
+            document.getElementById('category').value = data.category;
             document.getElementById('address').value = data.address;
 
             // Set the photo preview
@@ -308,6 +345,8 @@ document.getElementById('photo').addEventListener('change', function(event) {
         document.getElementById('photoPreview').src = ''; // Clear preview if no file
     }
 });
+
+
 document.getElementById('editMemberForm').addEventListener('submit', function(event) {
     event.preventDefault();  // Prevent the form from submitting the traditional way
 
@@ -318,40 +357,49 @@ document.getElementById('editMemberForm').addEventListener('submit', function(ev
         body: formData
     })
     .then(response => {
-        // Check if the response is OK (status 200)
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         return response.json();
     })
     .then(data => {
-        // Display the success or error message
-        const alertDiv = document.getElementById('modalAlert');
+        // Set alert message based on response
+        const alertMessage = document.getElementById('alertMessage');
+        const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+        
         if (data.success) {
-            alertDiv.classList.remove('d-none', 'alert-danger');
-            alertDiv.classList.add('alert-success');
-            alertDiv.innerHTML = 'Member updated successfully!';
+            alertMessage.classList.remove('alert-danger');
+            alertMessage.classList.add('alert-success');
+            alertMessage.innerHTML = 'Member updated successfully!';
         } else {
-            alertDiv.classList.remove('d-none', 'alert-success');
-            alertDiv.classList.add('alert-danger');
-            alertDiv.innerHTML = 'Error: ' + data.message;
+            alertMessage.classList.remove('alert-success');
+            alertMessage.classList.add('alert-danger');
+            alertMessage.innerHTML = 'Error: ' + data.message;
         }
-
-        // After 2 seconds, close the modal and reload the page
+        
+        // Show modal
+        alertModal.show();
+        
+        // Close modal and optionally reload page after 2 seconds
         setTimeout(function() {
-            const editMemberModal = bootstrap.Modal.getInstance(document.getElementById('editMemberModal'));
-            if (editMemberModal) {
-                editMemberModal.hide();
+            alertModal.hide();
+            if (data.success) {
+                location.reload();
             }
-            location.reload();  // Reload the page to reflect the changes
-        }, 2000);  // 2 seconds delay
+        }, 3000);  // 2 seconds delay
     })
     .catch(error => {
         console.error('Error updating member:', error);
-        const alertDiv = document.getElementById('modalAlert');
-        alertDiv.classList.remove('d-none', 'alert-success');
-        alertDiv.classList.add('alert-danger');
-        alertDiv.innerHTML = 'Error: ' + error.message;
+
+        const alertMessage = document.getElementById('alertMessage');
+        alertMessage.classList.remove('alert-success');
+        alertMessage.classList.add('alert-danger');
+        alertMessage.innerHTML = 'Error: ' + error.message;
+
+        const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+        alertModal.show();
+
+        setTimeout(() => alertModal.hide(), 2000);  // Hide modal after 2 seconds
     });
 });
 

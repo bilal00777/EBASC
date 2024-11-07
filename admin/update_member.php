@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = htmlspecialchars($_POST['email']);
     $phone_number = htmlspecialchars($_POST['phone_number']);
     $role = htmlspecialchars($_POST['role']);
+    $category = htmlspecialchars($_POST['category']);
     $address = htmlspecialchars($_POST['address']);
 
    // Check if a new photo is uploaded
@@ -71,7 +72,7 @@ if (move_uploaded_file($photo_tmp, $photo_path)) {
 
     // Prepare SQL for updating the member details
     $sql = "UPDATE members 
-            SET first_name = :first_name, last_name = :last_name, username = :username, email = :email, phone_number = :phone_number, role = :role, address = :address";
+            SET first_name = :first_name, last_name = :last_name, username = :username, email = :email, phone_number = :phone_number, role = :role ,category = :category , address = :address";
 
     // Add photo update if a new one was uploaded
     if ($photo) {
@@ -88,6 +89,7 @@ if (move_uploaded_file($photo_tmp, $photo_path)) {
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':phone_number', $phone_number);
     $stmt->bindParam(':role', $role);
+    $stmt->bindParam(':category', $category);
     $stmt->bindParam(':address', $address);
     $stmt->bindParam(':id', $member_id, PDO::PARAM_INT);
 

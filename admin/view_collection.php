@@ -90,7 +90,7 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
     <table class="table table-bordered">
         <thead>
             <tr>
-                <!-- <th>Collection ID</th> -->
+                <th>slno</th>
                 <th>Member ID</th>
                 <th>Member Name</th>
                 <th>Status</th>
@@ -99,10 +99,11 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
             </tr>
         </thead>
         <tbody>
-            <?php if (!empty($members)) : ?>
+            <?php if (!empty($members)) :
+                $slno=1; ?>
                 <?php foreach ($members as $member) : ?>
                     <tr>
-                        <!-- <td><?php echo htmlspecialchars($member['collection_id']); ?></td> -->
+                        <td><?php echo $slno++ ?></td>
                         <td><?php echo htmlspecialchars($member['id']); ?></td>
                         <td><?php echo htmlspecialchars($member['member_name']); ?></td>
                         <td><?php echo htmlspecialchars($member['status']); ?></td>

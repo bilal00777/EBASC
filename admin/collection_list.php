@@ -36,12 +36,9 @@ $query = "
     WHERE 1=1
 ";
 
-// Add search keyword filter
 if (!empty($search_keyword)) {
     $query .= " AND collections.heading LIKE :search_keyword";
 }
-
-// Add date range filters
 if (!empty($from_date)) {
     $query .= " AND collections.created_at >= :from_date";
 }
@@ -53,7 +50,6 @@ $query .= " GROUP BY collections.id";
 
 $stmt = $pdo->prepare($query);
 
-// Bind parameters for filters
 if (!empty($search_keyword)) {
     $stmt->bindValue(':search_keyword', '%' . $search_keyword . '%', PDO::PARAM_STR);
 }
@@ -80,35 +76,26 @@ $collections = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container mt-5">
     <h1 class="mb-4">Collections List</h1>
 
-    <!-- Filter Form -->
     <form method="GET" class="mb-4">
         <div class="row">
-            <!-- Search Keyword -->
             <div class="col-md-4">
                 <label for="search_keyword" class="form-label">Search Keyword</label>
                 <input type="text" name="search_keyword" id="search_keyword" class="form-control" value="<?php echo htmlspecialchars($search_keyword); ?>" placeholder="Enter heading">
             </div>
-
-            <!-- From Date -->
             <div class="col-md-3">
                 <label for="from_date" class="form-label">From Date</label>
                 <input type="date" name="from_date" id="from_date" class="form-control" value="<?php echo htmlspecialchars($from_date); ?>">
             </div>
-
-            <!-- End Date -->
             <div class="col-md-3">
                 <label for="end_date" class="form-label">End Date</label>
                 <input type="date" name="end_date" id="end_date" class="form-control" value="<?php echo htmlspecialchars($end_date); ?>">
             </div>
-
-            <!-- Filter Button -->
             <div class="col-md-2 align-self-end">
                 <button type="submit" class="btn btn-primary">Filter</button>
             </div>
         </div>
     </form>
 
-    <!-- Collections Table -->
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -123,13 +110,11 @@ $collections = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tr>
         </thead>
         <tbody>
-       
             <?php if (!empty($collections)) :
                  $slNo = 1; ?>
-                
                 <?php foreach ($collections as $collection) : ?>
                     <tr>
-                        <td><?php echo $slNo++; ?></td> <!-- Incremented Sl No -->
+                        <td><?php echo $slNo++; ?></td>
                         <td><?php echo htmlspecialchars($collection['id']); ?></td>
                         <td><?php echo htmlspecialchars($collection['heading']); ?></td>
                         <td><?php echo htmlspecialchars($collection['amount']); ?></td>
@@ -137,21 +122,50 @@ $collections = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo htmlspecialchars($collection['created_at']); ?></td>
                         <td><?php echo htmlspecialchars($collection['total_members']); ?></td>
                         <td>
-                            <a href="view_collection.php?id=<?php echo $collection['id']; ?>" class="btn btn-info btn-sm">View List</a>
-                            <a href="edit_collection.php?id=<?php echo $collection['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="delete_collection.php?id=<?php echo $collection['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this collection?');">Delete</a>
-                        </td>
+    <a href="view_collection.php?id=<?php echo $collection['id']; ?>" class="btn btn-info btn-sm">View List</a>
+    <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $collection['id']; ?>)">Delete</button>
+    <a href="download_pdf_collection.php?id=<?php echo $collection['id']; ?>" class="btn btn-secondary btn-sm">Download PDF</a>
+</td>
+
                     </tr>
                 <?php endforeach; ?>
             <?php else : ?>
                 <tr>
-                    <td colspan="7" class="text-center">No collections found.</td>
+                    <td colspan="8" class="text-center">No collections found.</td>
                 </tr>
             <?php endif; ?>
         </tbody>
     </table>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this collection?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function confirmDelete(collectionId) {
+    // Set the href attribute of the confirm delete button
+    document.getElementById('confirmDeleteBtn').href = 'delete_collection.php?id=' + collectionId;
+    // Show the modal
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+</script>
 </body>
 </html>

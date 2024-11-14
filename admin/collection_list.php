@@ -122,9 +122,9 @@ $collections = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo htmlspecialchars($collection['created_at']); ?></td>
                         <td><?php echo htmlspecialchars($collection['total_members']); ?></td>
                         <td>
-    <a href="view_collection.php?id=<?php echo $collection['id']; ?>" class="btn btn-info btn-sm">View List</a>
-    <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $collection['id']; ?>)">Delete</button>
-    <a href="download_pdf_collection.php?id=<?php echo $collection['id']; ?>" class="btn btn-secondary btn-sm">Download PDF</a>
+    <a href="view_collection.php?id=<?php echo $collection['id']; ?>" class="btn btn-info btn-sm mt-2">View List</a>
+    <a href="download_pdf_collection.php?id=<?php echo $collection['id']; ?>" target="_blank" class="btn btn-secondary btn-sm  mt-2">Download PDF</a>
+    <button class="btn btn-danger btn-sm mt-2" onclick="confirmDelete(<?php echo $collection['id']; ?>)">Delete</button>
 </td>
 
                     </tr>

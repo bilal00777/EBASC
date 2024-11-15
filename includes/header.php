@@ -191,6 +191,8 @@
         <div class="sub-menu">
             <a href="create_collections.php">Create Collections</a>
             <a href="collection_list.php">collection list</a>
+            <a href="collect_money_society.php">spcl Purpose collection</a>
+            <a href="show_spcl_collections.php">spcl collection list</a>
            
         </div>
 
@@ -261,43 +263,43 @@
         });
 
         // Dragging scroll behavior for the main content
-        const contentDiv = document.getElementById('mainContent');
+        // const contentDiv = document.getElementById('mainContent');
         
-        let isDown = false;
-        let startX, startY, scrollLeft, scrollTop;
+        // let isDown = false;
+        // let startX, startY, scrollLeft, scrollTop;
 
-        contentDiv.addEventListener('mousedown', (e) => {
-            isDown = true;
-            contentDiv.classList.add('no-select');
-            contentDiv.style.cursor = 'grabbing';
-            startX = e.pageX - contentDiv.offsetLeft;
-            startY = e.pageY - contentDiv.offsetTop;
-            scrollLeft = contentDiv.scrollLeft;
-            scrollTop = contentDiv.scrollTop;
-        });
+        // contentDiv.addEventListener('mousedown', (e) => {
+        //     isDown = true;
+        //     contentDiv.classList.add('no-select');
+        //     contentDiv.style.cursor = 'grabbing';
+        //     startX = e.pageX - contentDiv.offsetLeft;
+        //     startY = e.pageY - contentDiv.offsetTop;
+        //     scrollLeft = contentDiv.scrollLeft;
+        //     scrollTop = contentDiv.scrollTop;
+        // });
 
-        contentDiv.addEventListener('mouseleave', () => {
-            isDown = false;
-            contentDiv.classList.remove('no-select');
-            contentDiv.style.cursor = 'grab';
-        });
+        // contentDiv.addEventListener('mouseleave', () => {
+        //     isDown = false;
+        //     contentDiv.classList.remove('no-select');
+        //     contentDiv.style.cursor = 'grab';
+        // });
 
-        contentDiv.addEventListener('mouseup', () => {
-            isDown = false;
-            contentDiv.classList.remove('no-select');
-            contentDiv.style.cursor = 'grab';
-        });
+        // contentDiv.addEventListener('mouseup', () => {
+        //     isDown = false;
+        //     contentDiv.classList.remove('no-select');
+        //     contentDiv.style.cursor = 'grab';
+        // });
 
-        contentDiv.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - contentDiv.offsetLeft;
-            const y = e.pageY - contentDiv.offsetTop;
-            const walkX = (x - startX);
-            const walkY = (y - startY);
-            contentDiv.scrollLeft = scrollLeft - walkX;
-            contentDiv.scrollTop = scrollTop - walkY;
-        });
+        // contentDiv.addEventListener('mousemove', (e) => {
+        //     if (!isDown) return;
+        //     e.preventDefault();
+        //     const x = e.pageX - contentDiv.offsetLeft;
+        //     const y = e.pageY - contentDiv.offsetTop;
+        //     const walkX = (x - startX);
+        //     const walkY = (y - startY);
+        //     contentDiv.scrollLeft = scrollLeft - walkX;
+        //     contentDiv.scrollTop = scrollTop - walkY;
+        // });
     </script>
 </body>
 </html>

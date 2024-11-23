@@ -196,6 +196,15 @@
            
         </div>
 
+
+
+        <div class="nav-link with-sub" onclick="toggleMenu(this)">photo gallary</div>
+        <div class="sub-menu">
+            <a href="row_one.php">row one</a>
+           
+           
+        </div>
+
         <a href="../logout.php" class="nav-link">Logout</a>
     </div>
 

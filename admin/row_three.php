@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 if (move_uploaded_file($image['tmp_name'], $target_file)) {
                     try {
-                        $stmt = $pdo->prepare("INSERT INTO photogalleryone (title, image_path) VALUES (:title, :image_path)");
+                        $stmt = $pdo->prepare("INSERT INTO photogallerythree (title, image_path) VALUES (:title, :image_path)");
                         $stmt->bindParam(':title', $title);
                         $stmt->bindParam(':image_path', $unique_file_name);
                         $stmt->execute();
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['delete'])) {
         $id = $_POST['id'];
         try {
-            $stmt = $pdo->prepare("DELETE FROM photogalleryone WHERE id = :id");
+            $stmt = $pdo->prepare("DELETE FROM photogallerythree WHERE id = :id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             $success_message = "Image deleted successfully!";
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 // Fetch existing records from the database
-$query = $pdo->query("SELECT id, title, image_path FROM photogalleryone ORDER BY id DESC");
+$query = $pdo->query("SELECT id, title, image_path FROM photogallerythree ORDER BY id DESC");
 $records = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

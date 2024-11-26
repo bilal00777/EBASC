@@ -59,6 +59,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+
+// Fetch images from the database
+$sql = "SELECT id, title, image_path FROM photogalleryone ORDER BY created_at DESC";
+$stmt = $pdo->query($sql);
+
+// Fetch all images as an associative array
+$images = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+
+// Fetch images from the database
+$sql2 = "SELECT id, title, image_path FROM photogallerytwo ORDER BY created_at DESC";
+$stmt = $pdo->query($sql2);
+
+// Fetch all images as an associative array
+$images2 = $stmt->fetchAll(PDO::FETCH_ASSOC);  
+
+
+// Fetch images from the database
+$sql3 = "SELECT id, title, image_path FROM photogallerythree ORDER BY created_at DESC";
+$stmt = $pdo->query($sql3);
+
+// Fetch all images as an associative array
+$images3 = $stmt->fetchAll(PDO::FETCH_ASSOC);  
 ?>
 
 <!DOCTYPE html>
@@ -521,59 +544,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>Explore Moments of Creativity, Athleticism, and Compassion in Action</p>
 
             <div class="scrolling-logos">
-                <div class="scrolling-logos-wrapper">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 1">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 2">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 3">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 4">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 5">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 6">
-                    <!-- Repeat images for continuous effect -->
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 1">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 2">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 3">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 4">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 5">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 6">
-                </div>
-            </div>
+        <div class="scrolling-logos-wrapper">
+            <?php
+            // Generate dynamic HTML for each image
+            foreach ($images as $image) {
+                echo '<img src="admin/uploads_photo_g/' . htmlspecialchars($image['image_path']) . '" alt="' . htmlspecialchars($image['title']) . '" style="object-fit:cover;">';
+            }
+
+            // Duplicate images for continuous effect
+            foreach ($images as $image) {
+                echo '<img src="admin/uploads_photo_g/' . htmlspecialchars($image['image_path']) . '" alt="' . htmlspecialchars($image['title']) . '" " style="object-fit:cover;">';
+            }
+            ?>
+        </div>
 
 
             <div class="scrolling-logos2">
                 <div class="scrolling-logos-wrapper2">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 1">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 2">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 3">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 4">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 5">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 6">
-                    <!-- Repeat images for continuous effect -->
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 1">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 2">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 3">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 4">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 5">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 6">
+                <?php
+            // Generate dynamic HTML for each image
+            foreach ($images2 as $image) {
+                echo '<img src="admin/uploads_photo_g/' . htmlspecialchars($image['image_path']) . '" alt="' . htmlspecialchars($image['title']) . '" style="object-fit:cover;">';
+            }
+
+            // Duplicate images for continuous effect
+            foreach ($images2 as $image) {
+                echo '<img src="admin/uploads_photo_g/' . htmlspecialchars($image['image_path']) . '" alt="' . htmlspecialchars($image['title']) . '" " style="object-fit:cover;">';
+            }
+            ?>
                 </div>
             </div>
 
 
             <div class="scrolling-logos3">
                 <div class="scrolling-logos-wrapper3">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 1">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 2">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 3">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 4">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 5">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 6">
-                    <!-- Repeat images for continuous effect -->
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 1">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 2">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 3">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 4">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 5">
-                    <img src="https://via.placeholder.com/400x200" alt="Logo 6">
-                </div>
+                <?php
+            // Generate dynamic HTML for each image
+            foreach ($images3 as $image) {
+                echo '<img src="admin/uploads_photo_g/' . htmlspecialchars($image['image_path']) . '" alt="' . htmlspecialchars($image['title']) . '" style="object-fit:cover;">';
+            }
+
+            // Duplicate images for continuous effect
+            foreach ($images3 as $image) {
+                echo '<img src="admin/uploads_photo_g/' . htmlspecialchars($image['image_path']) . '" alt="' . htmlspecialchars($image['title']) . '" " style="object-fit:cover;">';
+            }
+            ?></div>
             </div>
        </section>
 

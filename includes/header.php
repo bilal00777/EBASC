@@ -201,6 +201,8 @@
         <div class="nav-link with-sub" onclick="toggleMenu(this)">photo gallary</div>
         <div class="sub-menu">
             <a href="row_one.php">row one</a>
+            <a href="row_two.php">row two</a>
+            <a href="row_three.php">row three</a>
            
            
         </div>

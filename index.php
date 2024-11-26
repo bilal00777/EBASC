@@ -120,7 +120,8 @@ $images3 = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="container-fluid">
       <!-- Left Side: Logo -->
       <a class="navbar-brand" href="#">
-        <img src="https://via.placeholder.com/150x50" alt="Logo">
+        <img src="logo/ebasc logo.png" alt="ebasc">
+       <span class="nav_ebasc">EBASC</span> 
       </a>
 
       <!-- Navbar Toggler for mobile -->

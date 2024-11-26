@@ -15,6 +15,15 @@ body {
 /* ------------------ */
 /* navbar */
 /* ----------------------- */
+.nav_ebasc {
+    color: rgb(179, 29, 29); /* Set text color to dark red */
+    font-size: larger;
+    font-weight: 900; /* Set font weight to 600 */
+    text-stroke: 0.1px rgb(224, 224, 224); /* Apply a 2px white stroke (works in WebKit-based browsers) */
+    -webkit-text-stroke: 0.5px rgb(255, 255, 255); /* Fallback for WebKit browsers */
+    position: relative;
+    top: 8px;
+}
 
 
   /* Custom CSS for transparent background and blur effect */

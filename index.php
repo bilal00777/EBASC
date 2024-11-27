@@ -619,9 +619,9 @@ $sponsors = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <h1>EBASC</h1>
                 <p>For any inquiries or to learn more about our club, feel free to reach out to us via email at  or give us a call at . We're here to help and look forward to connecting with you!</p>
                 <div class="addressws">
-                    <p><i class="bi bi-envelope-at-fill"></i> ebasc@gmail.com</p>
-                    <p><i class="bi bi-telephone"></i> 9746735615 (club secretory)</p>
-                    <p><i class="bi bi-telephone"></i> 9746735615 (club president)</p>
+                    <p><a href="mailto:-erattilbrothersartsandsports@gmail.com" style="text-decoration: none;color:white;"><i class="bi bi-envelope-at-fill"></i> erattilbrothersartsandsports@gmail.com</a></p>
+                    <p><a href="tel:-9207303397" style="text-decoration: none;color:white;"><i class="bi bi-telephone"></i> +91 9207303397 (club president)</a></p>
+                    <p><a href="tel:-9746735615" style="text-decoration: none;color:white;"><i class="bi bi-telephone"></i> +91 9746735615 (club secretory)</a></p>
 
                 </div>
             </div>
@@ -637,8 +637,8 @@ $sponsors = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <img src="logo/ebasc logo.png" alt="ebasc Logo" class="footer-logo">
                 </div>
                 <div class="col-md-4 text-center">
-                    <h2 class="footer-heading">Main Heading</h2>
-                    <p class="footer-subheading">Subheading goes here</p>
+                    <h2 class="footer-heading">ERATTIL BROTHERS</h2>
+                    <p class="footer-subheading">arts and sports club</p>
                     <div class="footer-icons">
                         <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>

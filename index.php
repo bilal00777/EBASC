@@ -82,6 +82,13 @@ $stmt = $pdo->query($sql3);
 
 // Fetch all images as an associative array
 $images3 = $stmt->fetchAll(PDO::FETCH_ASSOC);  
+
+// Fetch images from the database
+$sql4 = "SELECT id, company_name, logo,social_media_link FROM sponsors ";
+$stmt = $pdo->query($sql4);
+
+// Fetch all images as an associative array
+$sponsors = $stmt->fetchAll(PDO::FETCH_ASSOC); 
 ?>
 
 <!DOCTYPE html>
@@ -396,15 +403,21 @@ $images3 = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <section class="container sponsors-section">
         <h2  class="wow animate__fadeInUp" data-wow-duration="1s">OUR TRUSTED SPONSORS</h2>
         <div class="sponsors-container" id="sponsorsContainer">
-            <div class="sponsor-logo">LOGO</div>
-            <div class="sponsor-logo">LOGO</div>
-            <div class="sponsor-logo">LOGO</div>
-            <div class="sponsor-logo">LOGO</div>
-            <div class="sponsor-logo">LOGO</div>
-            <div class="sponsor-logo">LOGO</div>
-            <div class="sponsor-logo">LOGO</div>
-            <div class="sponsor-logo">LOGO</div>
-            <div class="sponsor-logo">LOGO</div>
+          
+
+
+            <?php
+            // Generate dynamic HTML for each image
+            foreach ($sponsors as $image) {
+                echo '<img src="admin/' . htmlspecialchars($image['logo']) . '" alt="' . htmlspecialchars($image['company_name']) . '" class="sponsor-logo">';
+            }
+
+            // Duplicate images for continuous effect
+            foreach ($sponsors as $image) {
+                echo '<img src="admin/' . htmlspecialchars($image['logo']) . '" alt="' . htmlspecialchars($image['company_name']) . '" " class="sponsor-logo">';
+            }
+            ?>
+           
         </div>
     </section>
 
@@ -530,8 +543,9 @@ $images3 = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="col-md-6 about-us-text">
                 <h1  class="wow animate__fadeInUp" data-wow-duration="1s">EBASC</h1>
-                <p  class="wow animate__fadeInUp" data-wow-duration="1.3s">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum. Pellentesque vehicula justo ut nisi bibendum, nec faucibus libero volutpat. Proin a bibendum orci.</p>
-                <p  class="wow animate__fadeInUp" data-wow-duration="1.5s">Nullam tincidunt tincidunt sem. Phasellus at lectus a est tristique commodo. Suspendisse potenti. Nulla facilisi. Integer non magna ut lacus faucibus vehicula a at lacus.</p>
+                <p  class="wow animate__fadeInUp" data-wow-duration="1.3s">Erattil Brothers Arts and Sports Club (EBASC) was established on September 7, 2013, with the vision of fostering unity, talent, and community spirit. Officially inaugurated by the esteemed Varkala Kahar, EBASC began its journey as a platform to promote arts, sports, and cultural activities in the region. Over the years, the club has become a vibrant hub for individuals of all ages to explore their potential and connect with others, upholding its founding principles of passion, teamwork, and excellence.</p>
+                <p  class="wow animate__fadeInUp" data-wow-duration="1.5s">
+                EBASC enhances the community by offering local youth opportunities in sports and arts, promoting fitness and creativity. It serves as a hub for cultural events, workshops, and social initiatives, building strong bonds among members. Through outreach and local development efforts, the club fosters community welfare and pride.</p>
             </div>
         </div>
 
